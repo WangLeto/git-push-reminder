@@ -42,6 +42,19 @@ export const updateRemote = async (workspace: WorkspaceFolder | string) => {
   return res;
 };
 
+export const findOutGitFolder = async (
+  workspace: WorkspaceFolder
+): Promise<string> => {
+  const res = await runCommand(
+    "git rev-parse --show-toplevel",
+    workspace.uri.path
+  );
+  if (!res.ok) {
+    return workspace.uri.path;
+  }
+  return res.res;
+};
+
 class StatusBarMessageHandler {
   private handler: Disposable | undefined;
   set(disposable: Disposable) {

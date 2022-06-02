@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
 import fs = require("fs");
 import path = require("path");
-import { statusbarMessageHandler, updateRemote } from "./helper";
+import {
+  findOutGitFolder,
+  statusbarMessageHandler,
+  updateRemote,
+} from "./helper";
 import { runCommand } from "./run-command";
 import { debounce } from "../utils";
 
@@ -11,13 +15,14 @@ export const traceUnPushedCommit = async (
   const workspacePath = workspace.uri.path;
   // first scan
   doScan(workspacePath, "initial");
-  fs.watch(path.resolve(workspacePath, ".git"), (type, name) => {
+  const gitFolder = path.resolve(await findOutGitFolder(workspace), ".git");
+  fs.watch(gitFolder, (_, name) => {
     if (name !== "HEAD") {
       return;
     }
     scanByChangeDebounced(workspacePath);
   });
-  fs.watch(path.resolve(workspacePath, ".git/refs/heads"), () => {
+  fs.watch(path.resolve(gitFolder, "refs/heads"), () => {
     scanByChangeDebounced(workspacePath);
   });
 };
