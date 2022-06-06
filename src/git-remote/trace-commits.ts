@@ -51,7 +51,7 @@ const scan = async (workspace: string, source: string) => {
       `[GitReminder]: 🧐 ${unPushed} commit${unPushed > 1 ? "s" : ""} to push`
     );
     statusbarMessageHandler.set(dispose);
-    if (unPushed >= 3) {
+    if (unPushed >= 2) {
       await showMessageAdvicePushing(unPushed, workspace, branchInfo);
     }
   }
