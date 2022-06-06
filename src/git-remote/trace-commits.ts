@@ -25,6 +25,9 @@ export const traceUnPushedCommit = async (
   fs.watch(path.resolve(gitFolder, "refs/heads"), () => {
     scanByChangeDebounced(workspacePath);
   });
+  fs.watch(path.resolve(gitFolder, "refs/remotes/origin"), () => {
+    scanByChangeDebounced(workspacePath);
+  });
 };
 
 const scanByChangeDebounced = debounce(
